@@ -1,0 +1,8 @@
+streamlit
+pandas
+numpy
+scipy
+groq
+langchain-groq
+python-dotenv
+openpyxl  # Required for reading Excel files
