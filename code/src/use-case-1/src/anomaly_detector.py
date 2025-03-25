@@ -24,16 +24,17 @@ def detect_anomalies(historical_df, test_df):
     results = []
     tolerance = 1
     
-    for index, test_row in test_df.iterrows():
-        account = test_row["account"]
-        balance_diff = test_row["balance difference"]
+    for account in test_df["account"].unique():
+        test_group = test_df[test_df["account"] == account].sort_values(by="as of date")
         historical_group = historical_df[historical_df["account"] == account]
         
         if historical_group.empty:
-            results.append({"account": account, "as of date": test_row["as of date"], "Comment": "No historical data available", "anomaly": "Yes", "next steps": "Review account history"})
+            for _, test_row in test_group.iterrows():
+                results.append({"account": account, "as of date": test_row["as of date"], "Comment": "No historical data available", "anomaly": "Yes", "next steps": "Review account history"})
             continue
         
-        balance_diffs = np.concatenate([historical_group["balance difference"].values, [balance_diff]])
+        combined_data = pd.concat([historical_group, test_group], ignore_index=True)
+        balance_diffs = combined_data["balance difference"].values
         x_vals = np.arange(len(balance_diffs))
         
         patterns = {
@@ -46,33 +47,39 @@ def detect_anomalies(historical_df, test_df):
         detected_pattern = ""
         anomaly = "Yes"
         
-        try:
-            popt, _ = curve_fit(linear_model, x_vals, balance_diffs)
-            fit_values = linear_model(x_vals, *popt)
-            residuals = np.abs(balance_diffs - fit_values)
-            if np.all(residuals < tolerance):
-                detected_pattern = "Linear pattern observed"
-                anomaly = "No"
-        except:
-            pass
-        
-        if anomaly == "Yes":
-            for pattern_name, (model, maxfev) in patterns.items():
-                if pattern_name == "Linear":
-                    continue
-                try:
-                    popt, _ = curve_fit(model, x_vals, balance_diffs, maxfev=maxfev)
-                    fit_values = model(x_vals, *popt)
-                    residuals = np.abs(balance_diffs - fit_values)
-                    if np.all(residuals < tolerance):
-                        detected_pattern = f"{pattern_name} pattern observed"
-                        anomaly = "No"
-                        break
-                except:
-                    continue
+        if np.all(np.abs(balance_diffs) < tolerance):
+            detected_pattern = "All balance differences are within the threshold"
+            anomaly = "No"
+        else:
+            try:
+                popt, _ = curve_fit(linear_model, x_vals, balance_diffs)
+                fit_values = linear_model(x_vals, *popt)
+                residuals = np.abs(balance_diffs - fit_values)
+                if np.all(residuals < tolerance):
+                    detected_pattern = "Linear pattern observed"
+                    anomaly = "No"
+            except:
+                pass
+            
+            if anomaly == "Yes":
+                for pattern_name, (model, maxfev) in patterns.items():
+                    if pattern_name == "Linear":
+                        continue
+                    try:
+                        popt, _ = curve_fit(model, x_vals, balance_diffs, maxfev=maxfev)
+                        fit_values = model(x_vals, *popt)
+                        residuals = np.abs(balance_diffs - fit_values)
+                        if np.all(residuals < tolerance):
+                            detected_pattern = f"{pattern_name} pattern observed"
+                            anomaly = "No"
+                            break
+                    except:
+                        continue
         
         anomaly_reason = generate_anomaly_reason(balance_diffs, anomaly, detected_pattern)
         next_steps = generate_next_steps(balance_diffs, anomaly)
-        results.append({"account": account, "as of date": test_row["as of date"], "Comment": anomaly_reason, "anomaly": anomaly, "next steps": next_steps})
+        
+        for _, test_row in test_group.iterrows():
+            results.append({"account": account, "as of date": test_row["as of date"], "Comment": anomaly_reason, "anomaly": anomaly, "next steps": next_steps})
     
     return pd.DataFrame(results)
