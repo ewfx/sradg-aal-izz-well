@@ -7,3 +7,4 @@ langchain-groq
 python-dotenv
 openpyxl  # Required for reading Excel files
 pytest
+xlsxwriter

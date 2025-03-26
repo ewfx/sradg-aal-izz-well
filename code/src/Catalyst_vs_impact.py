@@ -106,10 +106,7 @@ Do not output any text other than the JSON object.
 
 
 
-def main():
-    # Load the dataset
-    file_path = "reduced_catalyst_vs_impact_reconcillation_breaks.csv"
-    df = pd.read_csv(file_path)
+def analyze_catalyst_vs_impact(df):
     
     # Preprocess the data
     df = preprocess_data(df)
@@ -130,5 +127,3 @@ def main():
     
     return df
     
-if __name__ == "__main__":
-    result_df = main()
