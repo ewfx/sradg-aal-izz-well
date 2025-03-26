@@ -23,7 +23,12 @@ def main():
             # Clean column names
             historical_df.columns = historical_df.columns.str.strip().str.lower()
             test_df.columns = test_df.columns.str.strip().str.lower()
-            
+
+            # Convert 'as of date' column to datetime format
+            historical_df['as of date'] = pd.to_datetime(historical_df['as of date'], format="%m/%d/%Y", errors='coerce')
+
+            # Sort by 'as of date' in increasing order
+            historical_df = historical_df.sort_values(by="as of date", ascending=True)
             st.write("### Preview of Historical Data")
             st.dataframe(historical_df.head())
             st.write("### Preview of Test Data")
@@ -56,13 +61,19 @@ def main():
                     st.error(f"Missing required columns: {required_columns - set(test_df.columns)}")
     
     elif dataset_type == "Impact & Catalyst Data":
-        file = st.sidebar.file_uploader("Upload Impact & Catalyst Data", type=["csv"])
+        file = st.sidebar.file_uploader("Upload Impact & Catalyst Data", type=["csv","xlsx"])
         
         if file:
-            df = pd.read_csv(file)
-            st.write("### Preview of Uploaded Data")
-            st.dataframe(df.head())
-            
+            # Determine file type and read accordingly
+            if file.name.endswith(".csv"):
+                df = pd.read_csv(file)
+            elif file.name.endswith((".xls", ".xlsx")):
+                df = pd.read_excel(file)
+            else:
+                st.error("Unsupported file format. Please upload a CSV or XLSX file.")
+                st.stop()
+                st.write("### Preview of Uploaded Data")
+                st.dataframe(df.head())
             if st.button("Run Analysis"):
                 result_df = analyze_catalyst_vs_impact(df)
                 
