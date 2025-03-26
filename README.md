@@ -105,7 +105,7 @@ Financial anomalies can lead to **fraud, misreporting, and errors** in financial
 ## 🛠️ How We Built It
 
 - **Streamlit** - Interactive frontend for uploading and viewing results.
-- **Python (Pandas, NumPy, SciPy,Pandas, NumPy, Requests, JSON, RegEx)** - Data processing and statistical modeling.
+- **Python (Pandas, NumPy, SciPy,Pandas, NumPy, RegEx)** - Data processing and statistical modeling.
 - **LangChain + Groq API & Mistral SABA-24B via GROQ AP** - AI-powered anomaly reasoning.
 - **dotenv** - Secure API key handling.
 - **Git & GitHub** - Version control and collaboration.
@@ -147,8 +147,8 @@ streamlit run app.py
 ## 🏗️ Tech Stack
 
 🔹 Frontend: Streamlit<br>
-🔹 Model: LLama 3.3<br>
-🔹 Other: LangChain, Groq API, SciPy, Pandas
+🔹 Model: LLama 3.3, Mistral SABA-24B<br>
+🔹 Other: LangChain, Groq API, SciPy, Pandas, RegEx
 
 ## 👨‍💻 Testing instructions
 
@@ -160,6 +160,6 @@ pytest
 
 ## 👥 Team
 
-- **Disha Agarwal** - [GitHub](#https://github.com/DishaAgarwal03/) | [LinkedIn](#https://www.linkedin.com/in/dishaagarwal03/)
-- **Aniket Saxena** - [GitHub](#https://github.com/saxenaAniket) | [LinkedIn](#https://www.linkedin.com/in/aniket-saxena-61333221a/)
-- **Sara Hasan** - [GitHub](#https://github.com/sarahasan17) | [LinkedIn](#https://www.linkedin.com/in/sarahasan17/)
+- **Disha Agarwal** - [GitHub](https://github.com/DishaAgarwal03/) | [LinkedIn](https://www.linkedin.com/in/dishaagarwal03/)
+- **Aniket Saxena** - [GitHub](https://github.com/saxenaAniket) | [LinkedIn](https://www.linkedin.com/in/aniket-saxena-61333221a/)
+- **Sara Hasan** - [GitHub](https://github.com/sarahasan17) | [LinkedIn](https://www.linkedin.com/in/sarahasan17/)
