@@ -31,7 +31,11 @@ By integrating **machine learning models, AI-driven insights, and rule-based log
 
 ## 🎥 Demo
  
-📹 **Video Demo** (if applicable)  
+📹 **Video Demo** 
+
+[![Watch the video](https://img.youtube.com/vi/wyHtDpgtxMg/0.jpg)](https://www.youtube.com/watch?v=wyHtDpgtxMg)
+
+
 🖼️ **Screenshots**:
 **Use Case 1**
 - Screenshot 1
