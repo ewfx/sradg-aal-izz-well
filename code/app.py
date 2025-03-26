@@ -6,6 +6,10 @@ from src.data_loader import load_data
 from src.Catalyst_vs_impact import analyze_catalyst_vs_impact
 
 def main():
+    st.warning(
+    "⚠️ If you encounter errors while running the analysis, please ensure that you have accepted the model terms at: "
+    "[Groq Model Terms](https://console.groq.com/playground?model=mistral-saba-24b).")
+
     st.title("Data Analysis System")
     
     # Select dataset type
@@ -23,12 +27,13 @@ def main():
             # Clean column names
             historical_df.columns = historical_df.columns.str.strip().str.lower()
             test_df.columns = test_df.columns.str.strip().str.lower()
-
+            
             # Convert 'as of date' column to datetime format
             historical_df['as of date'] = pd.to_datetime(historical_df['as of date'], format="%m/%d/%Y", errors='coerce')
-
+            
             # Sort by 'as of date' in increasing order
             historical_df = historical_df.sort_values(by="as of date", ascending=True)
+
             st.write("### Preview of Historical Data")
             st.dataframe(historical_df.head())
             st.write("### Preview of Test Data")
@@ -72,8 +77,9 @@ def main():
             else:
                 st.error("Unsupported file format. Please upload a CSV or XLSX file.")
                 st.stop()
-                st.write("### Preview of Uploaded Data")
-                st.dataframe(df.head())
+            st.write("### Preview of Uploaded Data")
+            st.dataframe(df.head())
+            
             if st.button("Run Analysis"):
                 result_df = analyze_catalyst_vs_impact(df)
                 
