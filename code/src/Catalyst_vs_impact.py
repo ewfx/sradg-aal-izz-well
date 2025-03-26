@@ -35,6 +35,7 @@ def rule_based_classification(row):
 
 def query_mistral(prompt):
     GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+   # GROQ_API_KEY = "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"
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
@@ -90,7 +91,7 @@ Do not output any text other than the JSON object.
 
 """
     response = query_mistral(prompt)
-    #print(response)
+    print("Raw respomnse:",response)
     if not response or response.strip() == "":
         return "error", "No response from API", "error"
     json_text = extract_json(response)
@@ -106,10 +107,7 @@ Do not output any text other than the JSON object.
 
 
 
-def main():
-    # Load the dataset
-    file_path = "reduced_catalyst_vs_impact_reconcillation_breaks.csv"
-    df = pd.read_csv(file_path)
+def analyze_catalyst_vs_impact(df):
     
     # Preprocess the data
     df = preprocess_data(df)
@@ -125,10 +123,8 @@ def main():
     )
     
     # Save results
-    output_path = "reconciliation_analysis_results.csv"
-    df.to_csv(output_path, index=False)
+   # output_path = "reconciliation_analysis_results.csv"
+    #df.to_csv(output_path, index=False)
     
     return df
     
-if __name__ == "__main__":
-    result_df = main()
