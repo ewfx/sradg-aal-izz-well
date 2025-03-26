@@ -51,7 +51,7 @@ def detect_anomalies(historical_df, test_df):
 
         
         
-        combined_data = pd.concat([test_row.to_frame().T,historical_group], ignore_index=True).drop_duplicates()
+        combined_data = pd.concat([historical_group,test_row.to_frame().T], ignore_index=True).drop_duplicates()
         balance_diffs = combined_data["balance difference"].values
         x_vals = np.arange(len(balance_diffs))
         

@@ -51,6 +51,15 @@ def query_mistral(prompt):
     
     response = requests.post(GROQ_URL, headers=headers, json=payload)
 
+
+    if response.status_code == 400:
+        try:
+            error_data = response.json()
+            if "model_terms_required" in error_data.get("error", {}).get("code", ""):
+                return "Error: Model terms not accepted. Please visit https://console.groq.com/playground?model=mistral-saba-24b to accept them."
+        except Exception:
+            return "Error: Bad request. Please check your API input."
+
     if response.status_code == 200:
         result = response.json()
         return result["choices"][0]["message"]["content"]
