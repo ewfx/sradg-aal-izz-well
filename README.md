@@ -35,8 +35,12 @@ By integrating **machine learning models, AI-driven insights, and rule-based log
 📹 **Video Demo** (if applicable)  
 🖼️ **Screenshots**:
 
-- Screenshot 1 (Upload page)
-- Screenshot 2 (Anomaly detection results)
+- Screenshot 1
+- ![image](https://github.com/user-attachments/assets/c9425250-a2bc-4aa2-9bb5-932c45f536f6)
+
+- Screenshot 2
+- ![image](https://github.com/user-attachments/assets/4822cff3-d102-406c-a775-1b8862727008)
+
 
 ## 💡 Inspiration
 
