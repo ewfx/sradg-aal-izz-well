@@ -30,8 +30,7 @@ Our approach is divided into two key use cases:
 By integrating **machine learning models, AI-driven insights, and rule-based logic**, our solution **automates reconciliation, reduces processing time, and enhances decision-making efficiency** in financial operations.
 
 ## 🎥 Demo
-
-🔗 **Live Demo** (if applicable)  
+ 
 📹 **Video Demo** (if applicable)  
 🖼️ **Screenshots**:
 **Use Case 1**
