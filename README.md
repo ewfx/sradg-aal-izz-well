@@ -143,6 +143,8 @@ GROQ_API_KEY=your_api_key_here
 ```bash
 streamlit run app.py
 ```
+### 5️⃣ Accept the model terms at https://console.groq.com/playground?model=mistral-saba-24b
+
 
 ## 🏗️ Tech Stack
 
