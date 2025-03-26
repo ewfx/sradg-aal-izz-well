@@ -6,9 +6,9 @@ from src.llm_handler import query_llm
 
 def generate_anomaly_reason(balance_diffs, anomaly, detected_pattern):
     if anomaly == "Yes":
-        if max(balance_diffs) - min(balance_diffs) > 5000:
+        if max(balance_diffs) - min(balance_diffs) > 10000:
             return "Huge spike in balance detected"
-        elif np.std(balance_diffs) > 1000:
+        elif np.std(balance_diffs) > 500:
             return "Inconsistent variation in balance detected"
         else:
             prompt = f"Analyze balance history and provide the reason behind the anomaly. Using: {balance_diffs}. IN 8-10 WORDS CRISP AND CLEAR"
@@ -24,16 +24,34 @@ def detect_anomalies(historical_df, test_df):
     results = []
     tolerance = 1
     
-    for account in test_df["account"].unique():
-        test_group = test_df[test_df["account"] == account].sort_values(by="as of date")
-        historical_group = historical_df[historical_df["account"] == account]
+    for _, test_row in test_df.iterrows():
+
+        # historical_group = historical_df[historical_df["au"] == au]
+        historical_group = historical_df[
+            (historical_df["company"] == test_row["company"]) &
+            (historical_df["account"] == test_row["account"]) &
+            (historical_df["au"] == test_row["au"]) &
+            (historical_df["currency"] == test_row["currency"]) &
+            (historical_df["primary account"] == test_row["primary account"])
+        ]
         
         if historical_group.empty:
-            for _, test_row in test_group.iterrows():
-                results.append({"account": account, "as of date": test_row["as of date"], "Comment": "No historical data available", "anomaly": "Yes", "next steps": "Review account history"})
+            results.append({
+                "company":test_row["company"],
+                "au": test_row["au"],
+                "account":test_row["account"],
+                "currency": test_row["currency"],
+                "primary account": test_row["primary account"],
+                "as of date": test_row["as of date"],
+                "Comments": "No historical data available",
+                "anomaly": "Yes",
+                "next steps": "Review account history"
+            })
             continue
+
         
-        combined_data = pd.concat([historical_group, test_group], ignore_index=True)
+        
+        combined_data = pd.concat([test_row.to_frame().T,historical_group], ignore_index=True).drop_duplicates()
         balance_diffs = combined_data["balance difference"].values
         x_vals = np.arange(len(balance_diffs))
         
@@ -79,7 +97,16 @@ def detect_anomalies(historical_df, test_df):
         anomaly_reason = generate_anomaly_reason(balance_diffs, anomaly, detected_pattern)
         next_steps = generate_next_steps(balance_diffs, anomaly)
         
-        for _, test_row in test_group.iterrows():
-            results.append({"account": account, "as of date": test_row["as of date"], "Comment": anomaly_reason, "anomaly": anomaly, "next steps": next_steps})
+        results.append({
+            "company":test_row["company"],
+            "au": test_row["au"],
+            "account":test_row["account"],
+            "currency": test_row["currency"],
+            "primary account": test_row["primary account"],
+            "as of date": test_row["as of date"],
+            "Comments": anomaly_reason,
+            "anomaly": anomaly,
+            "next steps": next_steps
+        })
     
     return pd.DataFrame(results)

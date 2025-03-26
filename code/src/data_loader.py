@@ -1,7 +1,7 @@
 import pandas as pd
 
 def load_data(historical_file, test_file):
-    historical_df = pd.read_csv(historical_file)
+    historical_df = pd.read_excel(historical_file)
     test_df = pd.read_excel(test_file)
     historical_df.columns = historical_df.columns.str.lower()
     test_df.columns = test_df.columns.str.lower()
